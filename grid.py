@@ -28,7 +28,9 @@ class MatGraphics:
 
     def draw(self, win, matmat):
         self.n = self.n
-        pygame.draw.rect(win, WHITE, pygame.rect.Rect(LEFT, TOP, G_SIZE, G_SIZE), 2)
+        pygame.draw.rect(win, WHITE,
+                         pygame.rect.Rect(LEFT - 4, TOP - 4, self.CASE_SIZE * self.n + 4, self.CASE_SIZE * self.n + 4),
+                         4)
         matmat.draw(win)
         if self.focused:
             size = self.CASE_SIZE

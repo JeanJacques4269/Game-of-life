@@ -6,10 +6,10 @@ import pyperclip
 
 
 class Game:
-    def __init__(self, win, n=20):  # Here I put parameters related to when you generate the game, for example the map
+    def __init__(self, win, n=40):
         self.game_is_on = True
         self.win = win
-        pattern = [(1, 2), (2, 2), (3, 2)]
+        pattern = achismp144
         self.mat_of_life = GameOfLife(n, pattern)
         self.mat_of_life.update_neighbours()
         self.mat_front = MatGraphics(n, n)
