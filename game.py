@@ -15,9 +15,10 @@ class Game:
         self.mat_front = MatGraphics(n, n)
 
     def run(self):
+        clock = pygame.time.Clock()
         while self.game_is_on:
-            clock = pygame.time.Clock()
-            dt = clock.tick(30)
+            print(clock.get_fps())
+            dt = clock.tick(FPS)
             self.win.fill(BLACK)
             self.events()
             self.draw(self.win)
