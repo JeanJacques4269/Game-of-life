@@ -6,11 +6,11 @@ import pyperclip
 
 
 class Game:
-    def __init__(self, win, n=40):
+    def __init__(self, win, n=10):
         self.game_is_on = True
         self.win = win
-        pattern = achismp144
-        self.mat_of_life = GameOfLife(n, pattern)
+        pattern = []
+        self.mat_of_life = GameOfLife(n,pattern)
         self.mat_of_life.update_neighbours()
         self.mat_front = MatGraphics(n, n)
 
@@ -19,7 +19,7 @@ class Game:
         while self.game_is_on:
             print(clock.get_fps())
             dt = clock.tick(FPS)
-            self.win.fill(BLACK)
+            self.win.fill(LIGHTBLACK)
             self.events()
             self.draw(self.win)
 
@@ -38,7 +38,10 @@ class Game:
                     self.mat_of_life.next_day()
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                self.mat_front.handle(*event.pos, self.mat_of_life)
+                self.mat_front.handle_left(*event.pos, self.mat_of_life)
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                self.mat_front.handle_right(*event.pos, self.mat_of_life)
 
             if event.type == pygame.MOUSEMOTION:
                 self.mat_front.update_focus(event.pos)

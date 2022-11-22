@@ -1,4 +1,6 @@
 import itertools
+import math
+
 import numpy
 import pygame.draw
 from constants import *
@@ -28,29 +30,41 @@ class MatGraphics:
 
     def draw(self, win, matmat):
         self.n = self.n
-        pygame.draw.rect(win, WHITE,
+        pygame.draw.rect(win, BLACK,
                          pygame.rect.Rect(LEFT - 4, TOP - 4, self.CASE_SIZE * self.n + 4, self.CASE_SIZE * self.n + 4),
-                         4)
+                         1)
         matmat.draw(win)
         if self.focused:
             size = self.CASE_SIZE
             i, j = self.focused
             y, x = i * size, j * size
             pygame.draw.rect(win, GRAY,
-                             pygame.rect.Rect(LEFT + x - size * 0.1, TOP + y - size * 0.1, size * 1.2, size * 1.2), 3)
+                             pygame.rect.Rect(LEFT + x, TOP + y, size * 1, size * 1),
+                             int(1 + math.log(1 + 50 / self.n)))
 
     def update_focus(self, pos):
+        n = self.n
+        self.focused = None
         x, y = pos
         j = (x - LEFT) // self.CASE_SIZE
         i = (y - TOP) // self.CASE_SIZE
-        self.focused = i, j
+        if 0 <= i < n and 0 <= j < n:
+            self.focused = i, j
 
-    def handle(self, x, y, matoflife):
+    def handle_left(self, x, y, matoflife):
         j = int((x - LEFT) // self.CASE_SIZE)
         i = int((y - TOP) // self.CASE_SIZE)
         n = self.n
         if 0 <= i < n and 0 <= j < n:
-            matoflife.mat[i, j] = 0 if matoflife.mat[i, j] else 1
+            matoflife.mat[i, j] = 1
+            matoflife.update_neighbours()
+
+    def handle_right(self, x, y, matoflife):
+        j = int((x - LEFT) // self.CASE_SIZE)
+        i = int((y - TOP) // self.CASE_SIZE)
+        n = self.n
+        if 0 <= i < n and 0 <= j < n:
+            matoflife.mat[i, j] = 0
             matoflife.update_neighbours()
 
 
@@ -95,7 +109,7 @@ class GameOfLife:
         n = self.n
         for i in range(n):
             for j in range(n):
-                color = BLACK
+                color = CUTE2
                 if self.is_alive(i, j):
                     color = dicolor[self.voisins[i][j]]
                 left = j * self.CASE_SIZE + LEFT
@@ -108,6 +122,7 @@ class GameOfLife:
         for i in range(self.n):
             for j in range(self.n):
                 self.mat[i][j] = 0
+        self.update_neighbours()
 
     def get_pattern(self):
         res = []
@@ -124,4 +139,5 @@ class GameOfLife:
         return s
 
 
-dicolor = {0: RED, 1: RED, 2: GREEN, 3: GREEN, 4: RED, 5: RED, 6: RED, 7: RED, 8: RED, 9: RED}
+dicolor = {0: CUTERED, 1: CUTERED, 2: CUTEBLUE, 3: CUTEBLUE, 4: CUTERED, 5: CUTERED, 6: CUTERED, 7: CUTERED, 8: CUTERED,
+           9: CUTERED}
